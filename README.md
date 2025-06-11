@@ -12,4 +12,4 @@ gradle assembleDebug
 
 ## Notes
 
-The TensorFlow Lite model must accept 416x416 pixel images. The app loads labels from `labels.txt` in the assets folder and displays the top prediction with its confidence percentage.
+The TensorFlow Lite model must accept 416x416 pixel images. The app loads labels from `labels.txt` in the assets folder and displays the top prediction with its confidence percentage. A small `YuvToRgbConverter` helper based on RenderScript converts frames from the camera to RGB for the TensorFlow Lite interpreter.

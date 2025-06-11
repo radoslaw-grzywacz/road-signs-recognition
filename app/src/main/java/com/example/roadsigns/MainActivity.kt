@@ -16,7 +16,7 @@ import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.common.FileUtil
 import java.util.Locale
-import androidx.camera.core.YuvToRgbConverter
+import com.example.roadsigns.YuvToRgbConverter
 
 class MainActivity : AppCompatActivity() {
 
