@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.common.FileUtil
+import java.util.Locale
 import androidx.camera.core.YuvToRgbConverter
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var resultText: TextView
     private lateinit var interpreter: Interpreter
     private lateinit var yuvToRgb: YuvToRgbConverter
+    private lateinit var labels: List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         val model = FileUtil.loadMappedFile(this, "model.tflite")
         interpreter = Interpreter(model)
+        labels = FileUtil.loadLabels(this, "labels.txt")
 
         startCamera()
     }
@@ -57,16 +60,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class FrameAnalyzer : ImageAnalysis.Analyzer {
-        private val output = Array(1) { FloatArray(1) }
+        private val output = Array(1) { FloatArray(labels.size) }
 
         override fun analyze(image: ImageProxy) {
             val bitmap = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
             yuvToRgb.yuvToRgb(image.image!!, bitmap)
             val tensorImage = TensorImage.fromBitmap(bitmap)
             interpreter.run(tensorImage.buffer, output)
-            val percent = output[0][0] * 100
+            val scores = output[0]
+            var maxIdx = 0
+            for (i in 1 until scores.size) {
+                if (scores[i] > scores[maxIdx]) maxIdx = i
+            }
+            val percent = scores[maxIdx] * 100f
+            val label = if (maxIdx < labels.size) labels[maxIdx] else "Unknown"
             runOnUiThread {
-                resultText.text = String.format("Confidence: %.2f%%", percent)
+                resultText.text = String.format(Locale.US, "%s: %.2f%%", label, percent)
             }
             image.close()
         }

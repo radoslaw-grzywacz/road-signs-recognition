@@ -12,4 +12,4 @@ gradle assembleDebug
 
 ## Notes
 
-The TensorFlow Lite model must accept 416x416 pixel images. The current implementation simply displays the output score as a percentage.
+The TensorFlow Lite model must accept 416x416 pixel images. The app loads labels from `labels.txt` in the assets folder and displays the top prediction with its confidence percentage.
