@@ -1,6 +1,6 @@
 # Road Signs Recognition
 
-This repository contains a minimal Android application written in Kotlin that uses CameraX and TensorFlow Lite 2.18 to perform real time road sign recognition. The application opens the camera, analyzes preview frames and runs them through a TensorFlow Lite model. A mock `model.tflite` file is provided in the assets folder and should be replaced with a proper trained model.
+This repository contains a minimal Android application written in Kotlin that uses CameraX and TensorFlow Lite to perform real time road sign recognition. The sample project currently depends on TensorFlow Lite 2.17 because the `2.18.0` artifacts are not yet published to Maven Central. When those artifacts become available you can update the dependency version in `app/build.gradle`.
 
 ## Building
 
